@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .container h2 {
+            margin-bottom: 20px;
+        }
+        .container input[type="text"], .container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .container input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .welcome-section {
+            display: none;
+            text-align: center;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="section0">
+            <h1>Supply Chain Management</h1>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="display('section1')">Login</button>
+                <button class="btn btn-secondary" onclick="display('section2')">Signup</button>
+            </div>
+        </div>
+        <div id="section1" style="display: none;">
+            <div class="container">
+                <h2>Log in </h2>
+                <form action="signin.php" method="post">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+    
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+    
+                    <input type="submit" value="Sign In">
+                </form>
+            </div>
+        </div>
+        <div class="welcome-section" id="welcome-section">
+            <h2>Welcome!</h2>
+            <p>You have successfully logged in.</p>
+        </div>
+        <div id="section2" style="display: none;">
+            <h2>Signup</h2>
+            <form action="signup.php" method="post">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" class="form-control" id="age" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="position">Position:</label>
+                    <input type="text" class="form-control" id="position" name="position" required>
+                </div>
+                <div class="form-group">
+                    <label for="position">Password:</label>
+                    <input type="text" class="form-control" id="position" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <div id="success" style="display: none;">
+            <h2>Signup Successful</h2>
+            <p>Your account has been created successfully.</p>
+            <a href="#" onclick="display('section0')" class="btn btn-primary">Go to Home</a>
+        </div>
+
+        <div id="dashboard" style="display: none;">
+            <h2>Welcome to Your Dashboard</h2>
+            <p>This is a protected area accessible only after login.</p>
+            <a href="#" onclick="display('section0')" class="btn btn-primary">Go to Home</a>
+        </div>
+    </div>
+
+    <script>
+        function display(sectionId) {
+            // Hide all sections
+            document.getElementById('section0').style.display = 'none';
+            document.getElementById('section1').style.display = 'none';
+            document.getElementById('section2').style.display = 'none';
+            document.getElementById('success').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'none';
+
+            // Display the selected section
+            document.getElementById(sectionId).style.display = 'block';
+
+            // If navigating to success or dashboard, clear form inputs
+            if (sectionId === 'success' || sectionId === 'dashboard') {
+                clearForm('loginForm');
+                clearForm('signupForm');
+            }
+        }
+
+        function submitForm(formId, phpScript) {
+            var form = document.getElementById(formId);
+            var formData = new FormData(form);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", phpScript, true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    if (formId === 'loginForm') {
+                        display('dashboard');
+                    } else if (formId === 'signupForm') {
+                        display('success');
+                    }
+                } else {
+                    alert('An error occurred: ' + xhr.statusText);
+                }
+            };
+            xhr.send(formData);
+        }
+
+        function clearForm(formId) {
+            document.getElementById(formId).reset();
+        }
+    </script>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    
+</head>
+<body>
+    
+</body>
+</html>
